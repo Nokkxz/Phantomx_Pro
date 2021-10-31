@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="phantomx" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:include filename="$(find phantomx_description)/urdf/phantomx.xacro" />
+	<xacro:include filename="$(find phantomx_description)/urdf/arm.xacro" />
+
+	 <joint name="arm_base" type="fixed">
+        <parent link="phantomx_base_link"/>
+        <child link="base_link"/>
+         <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+</robot>

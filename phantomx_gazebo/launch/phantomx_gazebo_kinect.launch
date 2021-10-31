@@ -1,0 +1,30 @@
+<launch>
+
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find phantomx_gazebo)/worlds/house.world"/>
+    <arg name="paused" value="true"/>
+  </include>
+
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find phantomx_description)/urdf/phantomx_with_arm_with_kinect.urdf.xacro'" /> 
+
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model phantomx -x -3 -y 1 -z 0.2 -param robot_description"/> 
+
+  <node pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" name="depthimage_to_laserscan" output="screen">
+        <remap from="image" to="/camera/depth/image_raw" />
+        <remap from="camera_info" to="/camera/depth/camera_info" />
+        <remap from="scan" to="/scan" />
+        <param name="output_frame_id" value="/camera_link" />
+    </node>
+
+ 
+  <include file="$(find phantomx_control)/launch/phantomx_control.launch"/> 
+
+
+  <node name="phantomx_walker" pkg="phantomx_gazebo" type="chassisController.py" output="screen"/> 
+
+
+
+</launch>

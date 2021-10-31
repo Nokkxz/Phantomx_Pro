@@ -1,0 +1,14 @@
+<launch>
+
+  <node pkg="phantomx_slam" name="odom_tf_pub" type="odom_tf_pub.py" output="screen">
+  </node>
+
+  <!-- slam_karto -->
+  <node pkg="slam_karto" type="slam_karto" name="slam_karto" output="screen">
+    <rosparam command="load" file="$(find phantomx_slam)/config/karto_mapper_params.yaml" />
+  </node>
+
+  <node pkg="rviz" type="rviz" name="rviz" required="true"
+        args="-d $(find phantomx_slam)/rviz/phantomx_slam.rviz"/>
+
+</launch>

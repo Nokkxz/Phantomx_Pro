@@ -1,0 +1,25 @@
+<launch>
+
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find phantomx_gazebo)/worlds/house.world"/>
+    <arg name="paused" value="true"/>
+  </include>
+
+
+   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find phantomx_description)/urdf/phantomx_with_arm_with_rplidar.urdf.xacro'" /> 
+
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model phantomx -x -3 -y 1 -z 0.2 -param robot_description"/> 
+
+
+
+ 
+ <include file="$(find phantomx_control)/launch/phantomx_control.launch"/> 
+
+
+  <node name="phantomx_walker" pkg="phantomx_gazebo" type="chassisController.py" output="screen"/> 
+
+
+
+</launch>

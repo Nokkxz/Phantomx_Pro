@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot name="phantomx" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:include filename="$(find phantomx_description)/urdf/phantomx.xacro" />
+	<xacro:include filename="$(find phantomx_description)/urdf/arm.xacro" />
+    <xacro:include filename="$(find phantomx_description)/urdf/kinect.xacro" />
+
+
+
+	<xacro:property name="kinect_offset_x" value="0" />
+	<xacro:property name="kinect_offset_y" value="0" />
+	<xacro:property name="kinect_offset_z" value="0.05" />
+
+  <joint name="kinect_frame_joint" type="fixed">
+	  <origin xyz="${kinect_offset_x} ${kinect_offset_y} ${kinect_offset_z}" rpy="0 0 0" />
+	  <parent link="MP_BODY"/>
+	  <child link="camera_link"/>
+	</joint>
+	<xacro:kinect_camera prefix="camera"/>
+
+	<joint name="arm_base" type="fixed">
+        <parent link="phantomx_base_link"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0.12" rpy="0 0 0" />
+  </joint>
+
+
+
+    <gazebo>
+
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+      <robotNamespace>/phantomx</robotNamespace>
+    </plugin>
+
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+    <alwaysOn>true</alwaysOn>
+    <updateRate>50.0</updateRate>
+    <bodyName>MP_BODY</bodyName>
+    <topicName>odom</topicName>
+    <gaussianNoise>0.0</gaussianNoise>
+    <frameName>world</frameName>
+    <xyzOffsets>0 0 0</xyzOffsets>
+    <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+
+    </gazebo>
+
+</robot>
